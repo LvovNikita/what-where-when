@@ -1,17 +1,6 @@
-// TODO: переместить в EventsService!
-
 import dayjs from 'dayjs'
 import { EntitySchema } from 'typeorm'
-
-// TODO: переместить
-
-const EventsEnum = {
-  SPECIAL_DAY: 'special',
-  WEEKLY: 'weekly', 
-  MONTHLY: 'monthly', 
-  ANNUAL: 'annual',
-  ONE_TIME: 'one_time'
-}
+import { EventsEnum } from '../enums/events.enum.mjs'
 
 /**
  * Сущность События

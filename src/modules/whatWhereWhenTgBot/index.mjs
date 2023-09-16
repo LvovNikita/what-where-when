@@ -1,27 +1,7 @@
-import { Logger } from '../logger/index.mjs'
-import { EventEntity } from '../eventsService/entities/event.entity.mjs'
-import { CustomTelegramBot } from '../telegramBot/index.mjs'
+import { whatWhereWhenTgBot } from './bot.mjs'
 
 import menuCommands from './data/menu.commands.json' assert { type: 'json' }
 import eventsKeyboard from './data/events.keyboard.json' assert { type: 'json' }
-
-import { config } from '../configuration/index.mjs'
-import { dataSource } from '../database/data-source.mjs'
-import { EventsService } from '../eventsService/index.mjs'
-
-const botLogger = new Logger('whatWhereWhenTgBot')
-
-// BOT
-export const whatWhereWhenTgBot = new CustomTelegramBot(
-  config.TELEGRAM_BOT_TOKEN,
-  {
-    polling: true,
-  },
-  botLogger,
-  {
-    eventsService: new EventsService(dataSource, EventEntity)
-  }
-) 
 
 // MENU COMMANDS
 whatWhereWhenTgBot.setMyCommands(menuCommands)
@@ -176,4 +156,3 @@ whatWhereWhenTgBot.onText(/\/bdays/, (msg, match) => {
 whatWhereWhenTgBot.on('polling_error', (err) => {
   botLogger.error('polling_error: %s', err.message)
 })
-

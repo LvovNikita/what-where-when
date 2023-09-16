@@ -1,25 +1,18 @@
 import pg from 'pg'
 
-// import { expressApp } from './src/modules/expressApp/index.mjs'
-import { config } from './src/modules/configuration/index.mjs'
-import { whatWhereWhenTgBot } from  './src/modules/whatWhereWhenTgBot/index.mjs'
+import { Database } from './src/modules/database/index.mjs'
 import { dataSource } from './src/modules/database/data-source.mjs'
+import { Logger } from './src/modules/logger/index.mjs'
 // import { scheduler } from './src/modules/scheduler/index.mjs'
 
-import { Database } from './src/modules/database/index.mjs'
-// import { HttpServer } from './src/modules/httpServer/index.mjs'
-import { Logger } from './src/modules/logger/index.mjs'
+// Auto start:
+import { config } from './src/modules/configuration/index.mjs'
+import * as bot from  './src/modules/whatWhereWhenTgBot/index.mjs'
 
-// const httpServerLogger = new Logger('httpServer')
-const databaseLogger = new Logger('database')
-
-// const httpServer = new HttpServer(expressApp, httpServerLogger)
-const database = new Database(dataSource, pg.Client, databaseLogger)
+const database = new Database(dataSource, pg.Client, new Logger('database'))
 
 init: (async () => {
   await database.createDatabase()
   await database.initDataSource()
   // await scheduler.start()
 })()
-
-// httpServer.listen(config.HTTP_SERVER_PORT)

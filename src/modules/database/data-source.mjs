@@ -3,9 +3,9 @@ import { DataSource } from 'typeorm'
 import { EventEntity } from '../eventsService/entities/index.mjs'
 import * as migrations from '../../../migrations/index.mjs'
 
-// /**
-//  * Конфигурация соединения с базой данных
-//  */
+/**
+ * Конфигурация соединения с базой данных
+ */
 export const dataSource = new DataSource({
   type: 'postgres',
   host: config.POSTGRES_HOST,

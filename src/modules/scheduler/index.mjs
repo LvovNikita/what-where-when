@@ -2,7 +2,7 @@ import { Agenda } from 'agenda'
 import { config } from '../configuration/index.mjs'
 
 /**
- * Класс планировщика заданий
+ * Планировщик заданий
  */
 export const scheduler = new Agenda({
   db: {

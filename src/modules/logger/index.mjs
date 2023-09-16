@@ -1,14 +1,14 @@
 import { createLogger, format, transports } from 'winston';
 
 /**
- * Класс логгера на базе Winston
+ * Логгер на базе Winston
  */
 export class Logger {
   #logger = createLogger({
     transports: [
       new transports.Console({        
         format: format.combine(
-          format.splat(), // интерполяция
+          format.splat(), // поддержка интерполяции
           format.colorize(),
           format.simple(),
         )
@@ -25,14 +25,26 @@ export class Logger {
     this.serviceName = serviceName ?? ''
   }
 
+  /**
+   * Вывести информационное сообщение
+   * @param { string[] } args 
+   */
   info(...args) {
     this.#log('info', ...args);
   }
 
+  /**
+   * Вывести предупреждение
+   * @param { string[] } args 
+   */
   warn(...args) {
     this.#log('warn', ...args);
   }
 
+  /**
+   * Вывести сообщение об ошибке
+   * @param { string[] } args 
+   */
   error(...args) {
     this.#log('error', ...args);
   }

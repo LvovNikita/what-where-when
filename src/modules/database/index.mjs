@@ -1,10 +1,18 @@
 import { DataSource } from 'typeorm'
 
+// Types:
 import { Loggable } from '../core/loggable.class.mjs'
+import pg from 'pg'
+import { Logger } from '../logger/index.mjs'
 
+/**
+ * База данных
+ */
 export class Database extends Loggable {
   /**
-   * @param { DataSource } dataSource
+   * @param { DataSource } dataSource источник данных 
+   * @param { unknown } dbClient клиент/драйвер для работы с базой данный
+   * @param { Logger } logger логгер
    */
   constructor(dataSource, dbClient, logger) {
     super(logger)
@@ -12,6 +20,9 @@ export class Database extends Loggable {
     this.dbClient = dbClient
   }
   
+  /**
+   * Инициализировать источник данных
+   */
   async initDataSource() {
     return this.dataSource
       .initialize()
@@ -26,9 +37,13 @@ export class Database extends Loggable {
       })
   }
 
+  /**
+   * Создать базу данных, если она ещё не существует
+   */
   async createDatabase() {
     // Добавлять вручную логику для различных баз данных:
     if (this.dataSource.options.type === 'postgres') {
+      /** @type {pg.Client} */
       const client = new this.dbClient({
         database: 'postgres',
         host: this.dataSource.options.host,
@@ -38,8 +53,10 @@ export class Database extends Loggable {
       })
 
       await client.connect()
+
       try {
         await client.query(`CREATE DATABASE "${this.dataSource.options.database}"`)
+        await client.end()
       } catch (err) {
         if (err.message.includes('already exists')) {
           this.logger.info('.createDatabase(): PostgreSQL database already exists. Connected')
