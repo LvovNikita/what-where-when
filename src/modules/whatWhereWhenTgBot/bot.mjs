@@ -4,6 +4,8 @@ import { EventEntity } from '../eventsService/entities/event.entity.mjs'
 import { EventsService } from '../eventsService/index.mjs' 
 import { config } from '../configuration/index.mjs'
 import { dataSource } from '../database/data-source.mjs'
+import { EventNotificationService } from '../eventNotificationsService/index.mjs'
+import { EventNotificationEntity } from '../eventNotificationsService/entities/eventNotification.entity.mjs'
 
 /**
  * Telegram-бот What-Where-When
@@ -15,6 +17,7 @@ export const whatWhereWhenTgBot = new CustomTelegramBot(
   },
   new Logger('whatWhereWhenTgBot'),
   {
-    eventsService: new EventsService(dataSource, EventEntity)
+    eventsService: new EventsService(dataSource, EventEntity),
+    eventNotificationsService: new EventNotificationService(dataSource, EventNotificationEntity)
   }
 )

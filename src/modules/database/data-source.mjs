@@ -2,6 +2,7 @@ import { config } from '../configuration/index.mjs'
 import { DataSource } from 'typeorm'
 import { EventEntity } from '../eventsService/entities/index.mjs'
 import * as migrations from '../../../migrations/index.mjs'
+import { EventNotificationEntity } from '../eventNotificationsService/entities/eventNotification.entity.mjs'
 
 /**
  * Конфигурация соединения с базой данных
@@ -13,7 +14,7 @@ export const dataSource = new DataSource({
   database: `${config.POSTGRES_DBPREFIX}_${config.POSTGRES_DBNAME}`,
   username: config.POSTGRES_USERNAME,
   password: config.POSTGRES_PASSWORD,
-  entities: [EventEntity],
+  entities: [EventEntity, EventNotificationEntity],
   synchronize: false,
   migrations
 })

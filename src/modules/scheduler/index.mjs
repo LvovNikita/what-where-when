@@ -1,12 +1,9 @@
-import { Agenda } from 'agenda'
-import { config } from '../configuration/index.mjs'
+import * as cron from 'node-cron'
 
-/**
- * Планировщик заданий
- */
-export const scheduler = new Agenda({
-  db: {
-    address: config.MONGODB_CONNECTION_STRING
-  }
+cron.schedule('0 10 * * *', () => {
+  // TODO:
 })
 
+cron.schedule('*/10 * * * * *', () => {
+  console.log('TEST');
+})

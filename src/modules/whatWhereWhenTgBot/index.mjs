@@ -68,6 +68,9 @@ async function handleCreateEventCommand(bot, chatId, options, eventType) {
     const dateObj = getDateObjFromEventMessage(msg, eventType)
     const event = bot.services.eventsService.constructEvent({ subject, ...dateObj, chatId, type: eventType });
     await bot.services.eventsService.save(event);
+    // const result = await bot.services.eventsService.save(event);
+    // console.log(result);
+    await bot.services.eventNotificationsService.save({ event: { id: result.id }, date: event.nearestDate });
     bot.sendMessage(chatId, 'Событие успешно создано')
     bot.logger.info('Создано событие %s', msg.text)
   })
