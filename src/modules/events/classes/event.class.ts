@@ -1,9 +1,13 @@
+import { randomUUID } from 'node:crypto'
 import dayjs, { Dayjs } from 'dayjs'
+import isoWeek from 'dayjs/plugin/isoWeek'
+
 import { EventType } from '../../../libs/enums/event-type.enum'
 import { logger } from '../../../modules/core/logger'
 import { EventEntity } from '../entities/event.entity'
-import { randomUUID } from 'crypto'
 import { DateFormat } from '../../../libs/enums/date-format.enum'
+
+dayjs.extend(isoWeek)
 
 /**
  * Событие
@@ -106,7 +110,7 @@ export class Event extends EventEntity {
     if (this.day) {
       const nearestDate = dayjs()
         .startOf('week')
-        .day(this.day)
+        .isoWeekday(this.day)
       if (nearestDate.isBefore(this.currentDate)) {
         return nearestDate.add(1, 'week')
       }
@@ -142,23 +146,34 @@ export class Event extends EventEntity {
    * @returns дату ближайшего настраиваемого события
    */
   private specialEventNearestDate(): Dayjs  | null {
+    console.log('-'.repeat(20))
     if (this.month && this.week && this.day) {
-      let nearestDate = dayjs()
-        .month(this.month - 1)
-        .startOf('month')
-      if (typeof this.week === 'number') {
-        nearestDate = nearestDate.add(this.week - 1, 'weeks')
+      let nearestDate = dayjs().month(this.month - 1)
+
+      if(nearestDate.month() < dayjs().month()) {
+        nearestDate = nearestDate.add(1, 'year')
       }
-      // Если 'first' — не делать ничего (мы уже в начале месяца)
-      else if (this.week === 'last') {
-        nearestDate = nearestDate
-          .endOf('month')
-          .subtract(6, 'days') // чтобы не попасть на тот же день недели
+
+      nearestDate = nearestDate.startOf('month')
+
+      const isFirstWeek = [1, 'first'].includes(this.week)
+      const isLastWeek = [5, 'last'].includes(this.week)
+      
+      if (isFirstWeek) {
+        if (this.day < nearestDate.isoWeekday()) {
+          nearestDate = nearestDate.add(1, 'week').startOf('week')
+        }
+      } else if (isLastWeek) {
+        nearestDate = nearestDate.endOf('month').startOf('week')
+        if (this.day > nearestDate.isoWeekday()) {
+          nearestDate = nearestDate.subtract(1, 'week').startOf('week')
+        }
+      } else if (typeof this.week === 'number') {
+        nearestDate = nearestDate.add(this.week - 1, 'weeks').startOf('week').isoWeekday(this.day)
       }
-      nearestDate = nearestDate.day(this.day)
-      if (nearestDate.isBefore(this.currentDate)) {
-        return nearestDate.add(1, 'year')
-      }
+
+      nearestDate = nearestDate.isoWeekday(this.day)
+
       return nearestDate
     } else {
       logger.warn(`[class Event] incorrect event data ${this}`)
@@ -166,6 +181,3 @@ export class Event extends EventEntity {
     }
   }
 }
-
-// В П В С Ч П С
-// 1 2 3 4 5 6 7
