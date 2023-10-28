@@ -1,4 +1,4 @@
-import { DataSource, EntityTarget } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Event } from './classes/event.class'
 import { EventList } from './classes/event-list.class';
 import { EventEntity } from './entities/event.entity';
@@ -7,10 +7,7 @@ import { EventEntity } from './entities/event.entity';
  * Сервис для работы с событиями
  */
 export class EventsService {
-  constructor(
-    private readonly dataSource: DataSource,
-    private readonly EventEntity: EntityTarget<EventEntity>,
-  ) {}
+  constructor(private readonly eventRepository: Repository<EventEntity>) {}
 
   /**
    * Получить список событий по id подписчика
@@ -18,9 +15,7 @@ export class EventsService {
    * @returns список событий
    */
   async findBySubscriberId(subscriberId: string): Promise<EventEntity[]> {
-    return await this.dataSource
-      .getRepository(this.EventEntity)
-      .find({ where: { subscriberId } })
+    return await this.eventRepository.find({ where: { subscriberId } })
   }
 
   /**
@@ -28,12 +23,10 @@ export class EventsService {
    */
   public create = {
     /** Фабрика событий */
-    event: (eventDto: EventEntity): Event => {
-      return new Event(eventDto)
-    },
+    event: (...params: ConstructorParameters<typeof Event>): Event => new Event(...params),
+    /** Фабрика сущностей */
+    eventEntity: (event: Event) => this.eventRepository.create(event),
     /** Фабрика списков событий */
-    eventList(events: Event[]): EventList {
-      return new EventList(events)
-    }
+    eventList: (events: Event[]): EventList => new EventList(events),
   }
 }

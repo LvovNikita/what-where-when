@@ -1,8 +1,9 @@
 import { DataSource } from 'typeorm'
+import { EnvService } from '../env'
 import * as migrations from '../../migrations'
 import { EventEntity } from '../events/entities/event.entity'
-import { EnvService } from '../env'
 import { NotificationEntity } from './../notifications/entities/notification.entity'
+import { BirthdayEntity } from './../../modules/birthdays/entities/birthday.entity'
 
 EnvService.initEnvVariables()
 
@@ -16,7 +17,7 @@ export const postgresDataSource = new DataSource({
   database: `${process.env.POSTGRES_DBPREFIX}_${process.env.POSTGRES_DBNAME}`,
   username: process.env.POSTGRES_USERNAME,
   password: process.env.POSTGRES_PASSWORD,
-  entities: [EventEntity, NotificationEntity],
+  entities: [EventEntity, BirthdayEntity, NotificationEntity],
   synchronize: false,
   migrations
 })

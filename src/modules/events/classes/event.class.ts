@@ -4,20 +4,30 @@ import isoWeek from 'dayjs/plugin/isoWeek'
 
 import { EventType } from '../../../libs/enums/event-type.enum'
 import { logger } from '../../../modules/core/logger'
-import { EventEntity } from '../entities/event.entity'
 import { DateFormat } from '../../../libs/enums/date-format.enum'
+import { Week } from '../types/week.type'
 
 dayjs.extend(isoWeek)
 
 /**
  * Событие
  */
-export class Event extends EventEntity {
+export class Event {
+  public id: string
+
   /**
    * @param createEventDto DTO создания объекта
    */
-  constructor(eventDto: EventEntity) {
-    super(eventDto)
+  constructor(
+    public subject: string,
+    public type: EventType,
+    public subscriberId: string,
+    public year?: number,
+    public month?: number ,
+    public date?: number,
+    public week?: Week,
+    public day?: number,
+  ) {
     this.id = randomUUID();
   }
 
@@ -146,7 +156,6 @@ export class Event extends EventEntity {
    * @returns дату ближайшего настраиваемого события
    */
   private specialEventNearestDate(): Dayjs  | null {
-    console.log('-'.repeat(20))
     if (this.month && this.week && this.day) {
       let nearestDate = dayjs().month(this.month - 1)
 
