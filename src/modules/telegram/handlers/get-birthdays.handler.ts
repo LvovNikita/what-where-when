@@ -1,3 +1,5 @@
+import { BirthdayEntity } from 'modules/birthdays/entities/birthday.entity';
+import { ServiceLocator } from 'modules/serviceLocator';
 import TelegramBot from 'node-telegram-bot-api';
 
 /**
@@ -5,8 +7,9 @@ import TelegramBot from 'node-telegram-bot-api';
  * @param msg сообщение
  * @param match результат применения регулярного выражения к тексту
  */
-export function getBirthdaysHandler(this: TelegramBot, msg: TelegramBot.Message, match: RegExpExecArray | null) {
+export async function getBirthdaysHandler(this: TelegramBot & { services: ServiceLocator }, msg: TelegramBot.Message, match: RegExpExecArray | null) {
   const { id } = msg.chat;
-  // TODO:
-  this.sendMessage(id, 'UNDER CONSTRUCTION')
+  const birthdays: BirthdayEntity[] = await this.services.BirthdaysService.findBySubscriberId(String(id));
+  // TODO: вывод в нормальном формате
+  this.sendMessage(id, JSON.stringify(birthdays));
 }

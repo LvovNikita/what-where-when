@@ -6,6 +6,7 @@ import { EventType } from '../../../libs/enums/event-type.enum'
 import { logger } from '../../../modules/core/logger'
 import { DateFormat } from '../../../libs/enums/date-format.enum'
 import { Week } from '../types/week.type'
+import { IDateObject } from 'libs/interfaces/date-object.interface'
 
 dayjs.extend(isoWeek)
 
@@ -14,21 +15,23 @@ dayjs.extend(isoWeek)
  */
 export class Event {
   public id: string
+  public year?: number | null
+  public month?: number | null
+  public date?: number | null
+  public week?: Week | null
+  public day?: number | null
 
   /**
-   * @param createEventDto DTO создания объекта
+   *
    */
   constructor(
     public subject: string,
     public type: EventType,
     public subscriberId: string,
-    public year?: number,
-    public month?: number ,
-    public date?: number,
-    public week?: Week,
-    public day?: number,
+    dateObject: IDateObject
   ) {
     this.id = randomUUID();
+    Object.assign(this, dateObject)
   }
 
   /**

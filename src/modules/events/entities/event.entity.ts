@@ -25,23 +25,23 @@ export class EventEntity extends BaseEntity {
   
   /** Год события */
   @Column({ nullable: true, type: 'int' })
-  public year?: number
+  public year: number | null
 
   /** Месяц события */
   @Column({ nullable: true, type: 'int' })
-  public month?: number
+  public month: number | null
 
   /** Дата события */
   @Column({ nullable: true, type: 'int' })
-  public date?: number
+  public date: number | null
 
   /** Номер недели месяца */
   @Column({ type: 'enum', enum: [1, 2, 3, 4, 5, 'first', 'last'], nullable: true })
-  public week?: Week
+  public week: Week | null
 
   /** День недели */
   @Column({ nullable: true, type: 'int' })
-  public day?: number
+  public day: number | null
 
   /** Уведомлять о событии до */
   @Column({ type: 'date', default: '2033-09-25' })

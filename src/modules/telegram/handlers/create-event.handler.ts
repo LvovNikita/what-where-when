@@ -35,7 +35,7 @@ export async function createEventHandler(this: TelegramBot & ServiceWithLocator,
   this.onReplyToMessage(id, message_id, async (msg: TelegramBot.Message) => {
     const eventType: EventType = data.replace('/', '') as EventType
     const { subject, type, date } = new EventMessage(msg.text!, eventType)
-    const event: Event = this.services.EventsService.create.event(subject, type, String(id), date.year, date.month, date.date, date.week, date.day)
+    const event: Event = this.services.EventsService.create.event(subject, type, String(id), date)
     const eventEntity: EventEntity = this.services.EventsService.create.eventEntity(event);
     await eventEntity.save();
     const nearestDate = event.nearestDate;
