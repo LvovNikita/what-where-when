@@ -11,5 +11,7 @@ export enum EventType {
   /** Ежегодное */
   ANNUAL = 'annual',
   /** Разовое  */
-  ONE_TIME = 'one_time'
+  ONE_TIME = 'one_time',
+  /** День рождения */
+  BIRTHDAY = 'birthday'
 }

@@ -1,7 +1,9 @@
+import { PostgresDate } from 'libs/types/postgres-date.type';
+import { Uuid } from 'libs/types/uuid.type';
 import { randomUUID } from 'node:crypto'
 
 export class Birthday {
-  public id: string
+  public id: Uuid
 
   constructor(
     public subscriberId: string,
@@ -10,5 +12,20 @@ export class Birthday {
     public userHandler?: string
   ) {
     this.id = randomUUID();
+  }
+
+  public get nearestDate(): PostgresDate | null {
+    return null
+    // TODO:
+  }
+
+  /**
+   * Информация о событии в виде строки
+   * @returns информация о событии в соответствии с шаблоном
+   */
+  public get template(): string {
+    // TODO: временно
+    return `${this.month}-${this.date} – ${this.userHandler}`
+    // return `${this.nearestDate} – ${this.userHandler}`
   }
 }

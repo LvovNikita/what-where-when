@@ -1,5 +1,8 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
+/**
+ * Создание таблицы birthdays
+ */
 export class Migration1698509578857 implements MigrationInterface {
     name = 'Migration1698509578857'
 

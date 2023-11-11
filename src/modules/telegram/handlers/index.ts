@@ -1,4 +1,4 @@
-export { addBirthdayHandler } from './add-birthday.handler'
+export { createBirthdayHandler } from './create-birthday.handler'
 export { addEventHandler } from './add-event.handler'
 export { getBirthdaysHandler } from './get-birthdays.handler'
 export { getEventsHandler } from './get-events.handler'

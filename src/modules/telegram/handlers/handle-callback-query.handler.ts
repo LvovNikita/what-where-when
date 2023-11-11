@@ -3,7 +3,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import { logger } from './../../core/logger';
 import { createEventHandler } from './create-event.handler';
 import { EventType } from '../../../libs/enums/event-type.enum';
-import { ServiceWithLocator } from 'modules/serviceLocator';
+import { ServiceWithLocator } from './../../../modules/serviceLocator/types/service-with-locator.type';
 
 /**
  * Обработать команду, отправленную через обратный вызов (нажатия на кнопку, например)

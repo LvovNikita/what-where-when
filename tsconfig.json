@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": "./src",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "Node",
@@ -13,8 +13,7 @@
     "lib": ["ES2017"],
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "baseUrl": "src",
-    /**/
+    "baseUrl": "./src",
     "types": ["node"],
     "paths": {},
     "allowJs": true,

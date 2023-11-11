@@ -1,3 +1,6 @@
+import { PostgresDate } from 'libs/types/postgres-date.type';
+import { TelegramUserHandler } from 'libs/types/telegram-user-handler.type';
+import { Uuid } from 'libs/types/uuid.type';
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
 /**
@@ -7,7 +10,7 @@ import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 export class BirthdayEntity extends BaseEntity {
   /** Идентификатор UUID */
   @PrimaryColumn({ type: 'uuid', generated: false })
-  public id: string;
+  public id: Uuid;
 
   /** Идентификатор подписчика на событие (например чат, пользователь) */
   @Column('varchar')
@@ -23,9 +26,9 @@ export class BirthdayEntity extends BaseEntity {
 
   /** Никнейм пользователя-именинника */
   @Column({ type: 'varchar', nullable: true })
-  public userHandler?: string
+  public userHandler?: TelegramUserHandler
 
   /** Уведомлять о событии до */
   @Column({ type: 'date', default: '2033-09-25' })
-  protected until?: string
+  protected until?: PostgresDate
 }

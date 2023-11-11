@@ -1,9 +1,18 @@
+# What Where When
+
+Сервисы
+
+* [Telegram](./docs/telegram.md)
+
+
 TODO:
 
-* Исправить даты событий
-* Event.nearestDate — как итератор
-* Обработчик добавления дней рождения
-* Обработчик получения списка дней рождения
-* Шаблонный метод get-event-list.helper.ts для getNearestEventHandler и getEventsHandler 
+* Обработчик получения списка дней рождения +-
 * Задача CRON на рассылку уведомлений
 * Хостинг и GitHub Actions
+
+* Сервис для работы с датами, их итерированием и так далее.
+* Event.nearestDate — как итератор
+
+* Создать bash-скрипты для генерации типовых файлов.
+* Попробовать MicroORM или Prisma?

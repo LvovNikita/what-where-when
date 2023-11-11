@@ -1,6 +1,8 @@
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm'
 import { EventType } from '../../../libs/enums/event-type.enum'
 import { Week } from '../types/week.type'
+import { Uuid } from 'libs/types/uuid.type'
+import { PostgresDate } from 'libs/types/postgres-date.type'
 
 /**
  * Сущность события
@@ -9,7 +11,7 @@ import { Week } from '../types/week.type'
 export class EventEntity extends BaseEntity {
   /** Идентификатор UUID */
   @PrimaryColumn({ type: 'uuid' })
-  public id: string
+  public id: Uuid
 
   /** Название события */
   @Column('varchar')
@@ -45,5 +47,5 @@ export class EventEntity extends BaseEntity {
 
   /** Уведомлять о событии до */
   @Column({ type: 'date', default: '2033-09-25' })
-  protected until?: string
+  protected until?: PostgresDate
 }

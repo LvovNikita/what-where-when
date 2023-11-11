@@ -1,10 +1,12 @@
+import { TelegramUserHandler } from 'libs/types/telegram-user-handler.type'
+
 /**
  * Сообщение с информацией о создаваемом событии дня рождения
  */
 export class BirthdayMessage {
   constructor (public message: string) {}
 
-  get userHandler(): string {
+  get userHandler(): TelegramUserHandler {
     const userHandlerStart: number = this.message.indexOf(' ') + 1
     return this.message.substring(userHandlerStart)
   }

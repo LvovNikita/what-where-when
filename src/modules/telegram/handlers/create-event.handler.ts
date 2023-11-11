@@ -2,11 +2,9 @@ import TelegramBot from 'node-telegram-bot-api';
 
 import { EventType } from '../../../libs/enums/event-type.enum';
 import { EventMessage } from '../classes/event-message.class';
-import { ServiceWithLocator } from './../../serviceLocator';
 import { Event } from './../../events/classes/event.class'
-import { NotificationType } from './../../../libs/enums/notification-type.enum';
 import { EventEntity } from './../../events/entities/event.entity';
-import { NotificationEntity } from 'modules/notifications/entities/notification.entity';
+import { ServiceWithLocator } from './../../../modules/serviceLocator/types/service-with-locator.type';
 
 /**
  * Создать событие
@@ -33,16 +31,13 @@ export async function createEventHandler(this: TelegramBot & ServiceWithLocator,
   const { message_id } = await this.sendMessage(id, text!, options)
   
   this.onReplyToMessage(id, message_id, async (msg: TelegramBot.Message) => {
+    const isMessageCorrect: boolean = this.services.ValidationService.verifyString(msg.text || '', EventType.BIRTHDAY);
+    if (!isMessageCorrect) return this.sendMessage(id, `Некорректный формат события`);
     const eventType: EventType = data.replace('/', '') as EventType
     const { subject, type, date } = new EventMessage(msg.text!, eventType)
     const event: Event = this.services.EventsService.create.event(subject, type, String(id), date)
     const eventEntity: EventEntity = this.services.EventsService.create.eventEntity(event);
     await eventEntity.save();
-    const nearestDate = event.nearestDate;
-    if (nearestDate) {
-      const notification: NotificationEntity = this.services.NotificationsService.create.notification(NotificationType.EVENT, event.nearestDate, event.id)
-      await notification.save()
-    }
     this.sendMessage(id, `Событие ${event.subject} успешно создано`)
   })
 }

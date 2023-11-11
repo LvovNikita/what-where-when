@@ -1,1 +1,1 @@
-export * from './service-locator.service'
+export { ServiceLocator, serviceLocator } from './service-locator.service'

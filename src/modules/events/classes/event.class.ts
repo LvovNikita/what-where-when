@@ -7,6 +7,8 @@ import { logger } from '../../../modules/core/logger'
 import { DateFormat } from '../../../libs/enums/date-format.enum'
 import { Week } from '../types/week.type'
 import { IDateObject } from 'libs/interfaces/date-object.interface'
+import { Uuid } from 'libs/types/uuid.type'
+import { PostgresDate } from 'libs/types/postgres-date.type'
 
 dayjs.extend(isoWeek)
 
@@ -14,7 +16,7 @@ dayjs.extend(isoWeek)
  * Событие
  */
 export class Event {
-  public id: string
+  public id: Uuid
   public year?: number | null
   public month?: number | null
   public date?: number | null
@@ -46,7 +48,7 @@ export class Event {
    * Получить ближайшую дата события
    * @returns дата в формате YYYY-MM-DD
    */
-  public get nearestDate(): string | null {
+  public get nearestDate(): PostgresDate | null {
     const eventTypeToGetNearestDateFn = new Map<EventType, () => null | Dayjs>()
     eventTypeToGetNearestDateFn.set(EventType.ANNUAL, this.annualEventNearestDate.bind(this));
     eventTypeToGetNearestDateFn.set(EventType.MONTHLY, this.monthlyEventNearestDate.bind(this));

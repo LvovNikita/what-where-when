@@ -2,11 +2,14 @@ import { Client } from 'pg'
 
 import { DatabaseService, postgresDataSource } from '../database'
 import { EventsService } from '../events'
-import { NotificationsService } from '../notifications'
+import { NotificationsService } from './../notifications'
 import { EventEntity } from './../events/entities/event.entity'
 import { NotificationEntity } from './../notifications/entities/notification.entity'
 import { BirthdaysService } from './../birthdays'
 import { BirthdayEntity } from './../birthdays/entities/birthday.entity'
+import { DateTimeService } from './../../modules/datetime'
+import { ValidationService } from './../../modules/validation'
+import { validators } from './../../modules/validation/validations'
 
 /**
  * Cервисы под конкретный проект
@@ -26,8 +29,10 @@ export const serviceLocator: ServiceLocator = {
   AuthroizationService: null,
   CacheService: null,
   CronService: null,
+  CryptographyService: null,
   DatabaseService: new DatabaseService(Client, postgresDataSource),
-  DateTimeService: null,
+  DateTimeService: new DateTimeService(),
+  GraphqlService: null,
   HttpService: null,
   MailerService: null,
   MenuService: null,
@@ -40,7 +45,7 @@ export const serviceLocator: ServiceLocator = {
   SystemConfigService: null,
   TaxonomyService: null,
   UsersService: null,
-  ValidationService: null,
+  ValidationService: new ValidationService(validators),
   WebsocketService: null,
   ...customServices
 }
@@ -53,15 +58,5 @@ export type ServiceLocator = Record<string, any> & {
   EventsService: EventsService,
   NotificationsService: NotificationsService,
   BirthdaysService: BirthdaysService,
-}
-
-export type ServiceWithLocator = { services: ServiceLocator }
-
-/**
- * Функция для инжектирования локатора служб в сервисы
- * @param service сервис
- */
-export function injectServiceLocator<T>(service: any): T & ServiceWithLocator {
-  service.services = serviceLocator
-  return service
+  ValidationService: ValidationService
 }

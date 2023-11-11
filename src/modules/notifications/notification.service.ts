@@ -3,6 +3,7 @@ import { DataSource, EntityTarget } from 'typeorm';
 import { NotificationEntity } from './entities/notification.entity';
 import { NotificationType } from 'libs/enums/notification-type.enum';
 import { randomUUID } from 'crypto';
+import { PostgresDate } from 'libs/types/postgres-date.type';
 
 export class NotificationsService {
   constructor(
@@ -20,7 +21,7 @@ export class NotificationsService {
      * @param date дата уведомления в формате YYYY-MM-DD
      * @param sourceId идентификатор сущности
      */
-    notification: (type: NotificationType, date: string, sourceId: string | null = null): NotificationEntity => {
+    notification: (type: NotificationType, date: PostgresDate, sourceId: string | null = null): NotificationEntity => {
       return this.dataSource
         .getRepository(this.NotificationEntity)
         .create({
