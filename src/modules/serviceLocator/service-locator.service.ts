@@ -55,8 +55,9 @@ export const serviceLocator: ServiceLocator = {
  */
 
 export type ServiceLocator = Record<string, any> & {
+  BirthdaysService: BirthdaysService,
+  DateTimeService: DateTimeService,
   EventsService: EventsService,
   NotificationsService: NotificationsService,
-  BirthdaysService: BirthdaysService,
   ValidationService: ValidationService
 }

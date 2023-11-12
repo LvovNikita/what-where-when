@@ -1,4 +1,3 @@
-import { PostgresDate } from 'libs/types/postgres-date.type';
 import { Uuid } from 'libs/types/uuid.type';
 import { randomUUID } from 'node:crypto'
 
@@ -14,18 +13,13 @@ export class Birthday {
     this.id = randomUUID();
   }
 
-  public get nearestDate(): PostgresDate | null {
-    return null
-    // TODO:
-  }
-
   /**
    * Информация о событии в виде строки
    * @returns информация о событии в соответствии с шаблоном
    */
   public get template(): string {
-    // TODO: временно
-    return `${this.month}-${this.date} – ${this.userHandler}`
-    // return `${this.nearestDate} – ${this.userHandler}`
+    const month = String(this.month).padStart(2, '0')
+    const date = String(this.date).padStart(2, '0')
+    return `${date}.${month} – ${this.userHandler}`
   }
 }

@@ -1,48 +1,128 @@
-import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek'
+import dayjs, { Dayjs } from 'dayjs';
+import { Week } from 'modules/events/types/week.type';
+
+dayjs.extend(isoWeek)
 
 export class DateTimeService {
   /**
    * Генератор дат ежегодных событий
-   * @param month 
-   * @param date 
+   * @param month месяц
+   * @param date число
+   * @returns дату ближайшего ежегодного события
    */
-  * annualEventGenerator(month: number, date: number): IterableIterator<dayjs.Dayjs> {
-
+  * annualEventGenerator(startMonth: number, startDate: number): IterableIterator<Dayjs> {
+    let currentDate: Dayjs = dayjs()
+      .month(startMonth - 1)
+      .date(startDate)
+    const getNextDate = (currentDate: Dayjs): Dayjs => currentDate.add(1, 'year');
+    if (currentDate.isBefore(Date.now())) {
+      currentDate = getNextDate(currentDate)
+    }
+    while (true) {
+      yield currentDate
+      currentDate = getNextDate(currentDate)
+    }
   }
 
   /**
    * Генератор дат ежемесячных событий
-   * @param date 
+   * @param date число
+   * @returns дату ближайшего ежемесячного события
    */
-  * monthlyEventGenerator(date: number): IterableIterator<dayjs.Dayjs> {
-
+  * monthlyEventGenerator(date: number): IterableIterator<Dayjs> {
+    let currentDate: Dayjs = dayjs()
+      .date(date)
+    const getNextDate = (currentDate: Dayjs): Dayjs => currentDate.add(1, 'month').date(date)
+    if (currentDate.isBefore(Date.now())) {
+      currentDate = getNextDate(currentDate)
+    }
+    while (true) {
+      yield currentDate
+      currentDate = getNextDate(currentDate)
+    }
   }
   
   /**
    * Генератор дат еженедельных событий
-   * @param day 
+   * @param day день недели
+   * @returns дату ближайшего еженедельного события
    */
-  * weeklyEventGenerator(day: number): IterableIterator<dayjs.Dayjs> {
-
+  * weeklyEventGenerator(day: number): IterableIterator<Dayjs> {
+    let currentDate: Dayjs = dayjs()
+      .startOf('week')
+      .isoWeekday(day)
+    const getNextDate = (currentDate: Dayjs): Dayjs => currentDate.add(1, 'week')
+    if (currentDate.isBefore(Date.now())) {
+      currentDate = getNextDate(currentDate)
+    }
+    while (true) {
+      yield currentDate
+      currentDate = getNextDate(currentDate)
+    }
   }
 
   /**
    * Генератор дат(ы) разовых событий
-   * @param year 
-   * @param month 
-   * @param date 
+   * @param year год
+   * @param month месяц
+   * @param date число
+   * @returns дату ближайшего разового события
    */
-  * oneTimeEventGenerator(year: number, month: number, date: number): IterableIterator<dayjs.Dayjs> {
-
+  * oneTimeEventGenerator(year: number, month: number, date: number): IterableIterator<Dayjs> {
+    const currentDate: Dayjs = dayjs()
+      .year(year)
+      .month(month)
+      .date(date)
+    yield currentDate
+    if (currentDate.isBefore(Date.now())) {
+      return null
+    }
   }
 
   /**
    * Генератор дат настраиваемых событий
-   * @param month 
-   * @param week 
-   * @param day 
+   * @param month месяц
+   * @param week неделя месяца
+   * @param day день недели
+   * @returns дату ближайшего настраиваемого события
    */
-  * specialEventGenerator(month: number, week: number, day: number): IterableIterator<dayjs.Dayjs> {
+  * specialEventGenerator(month: number, week: Week, day: number): IterableIterator<Dayjs> {
+    let currentDate: Dayjs = dayjs().subtract(1, 'year')
 
+    function getNextDate(currentDate: Dayjs): Dayjs {
+      currentDate = currentDate
+        .add(1, 'year')
+        .month(month - 1)
+        .startOf('month')
+      const isFirstWeek = [1, 'first'].includes(week)
+      const isLastWeek = [5, 'last'].includes(week)
+      if (isFirstWeek) {
+        if (day < currentDate.isoWeekday()) {
+          currentDate = currentDate.add(7, 'days').isoWeekday(1)
+        }
+      } 
+      else if (isLastWeek) {
+        currentDate = currentDate.endOf('month').startOf('week')
+        if (day > currentDate.isoWeekday()) {
+          currentDate = currentDate.subtract(1, 'week').isoWeekday(1)
+        }
+      } else if (typeof week === 'number') {
+        currentDate = currentDate.add(week - 1, 'weeks').isoWeekday(1)
+      }
+      currentDate = currentDate.isoWeekday(day)
+      return currentDate
+    }
+
+    currentDate = getNextDate(currentDate)
+
+    if (currentDate.isBefore(Date.now())) {
+      currentDate = getNextDate(currentDate)
+    }
+
+    while (true) {
+      yield currentDate
+      currentDate = getNextDate(currentDate)
+    }
   }
 } 

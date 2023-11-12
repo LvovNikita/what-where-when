@@ -1,5 +1,4 @@
 import { BirthdayList } from './../../../modules/birthdays/classes/birthday-list.class';
-import { Birthday } from './../../../modules/birthdays/classes/birthday.class';
 import { BirthdayEntity } from './../../../modules/birthdays/entities/birthday.entity';
 import { ServiceLocator } from './../../../modules/serviceLocator';
 import TelegramBot from 'node-telegram-bot-api';
@@ -11,9 +10,13 @@ import TelegramBot from 'node-telegram-bot-api';
  */
 export async function getBirthdaysHandler(this: TelegramBot & { services: ServiceLocator }, msg: TelegramBot.Message, match: RegExpExecArray | null) {
   const { id } = msg.chat;
-  const birthdays: BirthdayEntity[] = await this.services.BirthdaysService.findBySubscriberId(String(id));
-  // TODO: проверить
-  const birthdaysObjs = birthdays.map(birthday => new Birthday(birthday.subscriberId, birthday.month, birthday.date, birthday.userHandler))
-  const birthdaysList: BirthdayList = new BirthdayList(birthdaysObjs);
+  const birthdayEntities: BirthdayEntity[] = await this.services.BirthdaysService.findBySubscriberId(String(id));
+  const birthdays = birthdayEntities.map((birthdayEntity: BirthdayEntity) => this.services.BirthdaysService.create.birthday(
+    birthdayEntity.subscriberId,
+    birthdayEntity.month,
+    birthdayEntity.date,
+    birthdayEntity.userHandler
+  ))
+  const birthdaysList: BirthdayList = this.services.BirthdaysService.create.birthdayList(birthdays)
   this.sendMessage(id, birthdaysList.template);
 }
