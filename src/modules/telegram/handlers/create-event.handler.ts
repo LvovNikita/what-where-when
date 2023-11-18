@@ -31,9 +31,9 @@ export async function createEventHandler(this: TelegramBot & ServiceWithLocator,
   const { message_id } = await this.sendMessage(id, text!, options)
   
   this.onReplyToMessage(id, message_id, async (msg: TelegramBot.Message) => {
-    const isMessageCorrect: boolean = this.services.ValidationService.verifyString(msg.text || '', EventType.BIRTHDAY);
-    if (!isMessageCorrect) return this.sendMessage(id, `Некорректный формат события`);
     const eventType: EventType = data.replace('/', '') as EventType
+    const isMessageCorrect: boolean = this.services.ValidationService.verifyString(msg.text || '', eventType);
+    if (!isMessageCorrect) return this.sendMessage(id, `Некорректный формат события`);
     const { subject, type, date } = new EventMessage(msg.text!, eventType)
     const event: Event = this.services.EventsService.create.event(subject, type, String(id), date)
     const eventEntity: EventEntity = this.services.EventsService.create.eventEntity(event);

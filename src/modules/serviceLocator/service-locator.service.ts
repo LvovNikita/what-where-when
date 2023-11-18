@@ -9,7 +9,8 @@ import { BirthdaysService } from './../birthdays'
 import { BirthdayEntity } from './../birthdays/entities/birthday.entity'
 import { DateTimeService } from './../../modules/datetime'
 import { ValidationService } from './../../modules/validation'
-import { validators } from './../../modules/validation/validations'
+import { validators } from '../validation/validators'
+import { CronService } from '../cron'
 
 /**
  * Cервисы под конкретный проект
@@ -23,12 +24,12 @@ const customServices = {
  * Локатор служб (сервисов)
  * В список включены типовые названия сервисов
  */
-export const serviceLocator: ServiceLocator = {
+export const serviceLocator = {
   AdminService: null,
   AuthenticationService: null,
   AuthroizationService: null,
   CacheService: null,
-  CronService: null,
+  CronService: new CronService(),
   CryptographyService: null,
   DatabaseService: new DatabaseService(Client, postgresDataSource),
   DateTimeService: new DateTimeService(),
@@ -53,11 +54,4 @@ export const serviceLocator: ServiceLocator = {
 /**
  * Типизация для подсказок в IDE
  */
-
-export type ServiceLocator = Record<string, any> & {
-  BirthdaysService: BirthdaysService,
-  DateTimeService: DateTimeService,
-  EventsService: EventsService,
-  NotificationsService: NotificationsService,
-  ValidationService: ValidationService
-}
+export type ServiceLocator = typeof serviceLocator

@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { BirthdayEntity } from './entities/birthday.entity';
 import { Birthday } from './classes/birthday.class';
 import { BirthdayList } from './classes/birthday-list.class';
@@ -19,5 +19,9 @@ export class BirthdaysService {
     birthday:  (...params: ConstructorParameters<typeof Birthday>): Birthday => new Birthday(...params),
     birthdayEntity: (birthday: Birthday): BirthdayEntity => this.birthdayRepository.create(birthday),
     birthdayList: (birthdays: Birthday[]): BirthdayList => new BirthdayList(birthdays),
+  }
+
+  async find(options: FindManyOptions<BirthdayEntity> = {}): Promise<BirthdayEntity[]> {
+    return await this.birthdayRepository.find(options)
   }
 }

@@ -101,7 +101,7 @@ export class DateTimeService {
         if (day < currentDate.isoWeekday()) {
           currentDate = currentDate.add(7, 'days').isoWeekday(1)
         }
-      } 
+      }
       else if (isLastWeek) {
         currentDate = currentDate.endOf('month').startOf('week')
         if (day > currentDate.isoWeekday()) {

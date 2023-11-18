@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { Event } from './classes/event.class'
 import { EventList } from './classes/event-list.class';
 import { EventEntity } from './entities/event.entity';
@@ -28,5 +28,9 @@ export class EventsService {
     eventEntity: (event: Event) => this.eventRepository.create(event),
     /** Фабрика списков событий */
     eventList: (events: Event[]): EventList => new EventList(events),
+  }
+
+  async find(options: FindManyOptions<EventEntity> = {}): Promise<EventEntity[]> {
+    return await this.eventRepository.find(options)
   }
 }
