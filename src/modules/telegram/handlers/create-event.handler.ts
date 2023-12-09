@@ -5,6 +5,7 @@ import { EventMessage } from '../classes/event-message.class';
 import { Event } from './../../events/classes/event.class'
 import { EventEntity } from './../../events/entities/event.entity';
 import { ServiceWithLocator } from './../../../modules/serviceLocator/types/service-with-locator.type';
+import { logger } from './../../core/logger';
 
 /**
  * Создать событие
@@ -38,6 +39,7 @@ export async function createEventHandler(this: TelegramBot & ServiceWithLocator,
     const event: Event = this.services.EventsService.create.event(subject, type, String(id), date)
     const eventEntity: EventEntity = this.services.EventsService.create.eventEntity(event);
     await eventEntity.save();
+    logger.info(`[Telegram] было создано событие ${JSON.stringify(event)}`)
     this.sendMessage(id, `Событие ${event.subject} успешно создано`)
   })
 }

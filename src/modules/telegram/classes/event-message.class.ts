@@ -8,11 +8,17 @@ import { Week } from 'modules/events/types/week.type'
 export class EventMessage {
   constructor(public message: string, public type: EventType) {}
 
+  /**
+   * 
+   */
   get subject(): string {
     const subjectStart: number = this.message.indexOf(' ') + 1
     return this.message.substring(subjectStart)
   }
 
+  /**
+   * 
+   */
   get date(): IDateObject {
     const dateEnd: number = this.message.indexOf(' ')
     const dateArr: string[] = this.message.substring(0, dateEnd).split(/\.|:/)

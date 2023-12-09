@@ -30,6 +30,11 @@ export class EventsService {
     eventList: (events: Event[]): EventList => new EventList(events),
   }
 
+  /**
+   * 
+   * @param options 
+   * @returns 
+   */
   async find(options: FindManyOptions<EventEntity> = {}): Promise<EventEntity[]> {
     return await this.eventRepository.find(options)
   }

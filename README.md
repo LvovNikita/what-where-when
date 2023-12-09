@@ -1,15 +1,13 @@
 # What Where When
 
-Сервисы
+Telegram-бот, уведомляющий о предстоящих событиях
 
 <!-- * [Telegram](./docs/telegram.md) -->
 
-TODO:
-
+<!-- * NotificationService не используется!
 * Bash-скрипты для генерации типовых файлов
-* Лог о запуске бота
 * Вынести валидаторы в сервисы
 * Типизация
 * JSDoc
 * Порядок зависимостей
-* GitHub Actions
+* GitHub Actions -->

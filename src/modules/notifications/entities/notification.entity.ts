@@ -3,6 +3,9 @@ import { NotificationType } from '../../../libs/enums/notification-type.enum';
 import { Uuid } from 'libs/types/uuid.type';
 import { PostgresDate } from 'libs/types/postgres-date.type';
 
+/**
+ * 
+ */
 @Entity({ name: 'notifications' })
 export class NotificationEntity extends BaseEntity {
   /** Идентификатор UUID */

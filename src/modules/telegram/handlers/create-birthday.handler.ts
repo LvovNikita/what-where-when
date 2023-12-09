@@ -5,6 +5,7 @@ import { Birthday } from './../../../modules/birthdays/classes/birthday.class';
 import { BirthdayEntity } from './../../../modules/birthdays/entities/birthday.entity';
 import { ServiceWithLocator } from 'modules/serviceLocator/types/service-with-locator.type';
 import { EventType } from './../../../libs/enums/event-type.enum';
+import { logger } from './../../core/logger';
 
 /**
  * Добавить день рождения
@@ -28,6 +29,7 @@ export async function createBirthdayHandler(this: TelegramBot & ServiceWithLocat
     const birthday: Birthday = this.services.BirthdaysService.create.birthday(String(id), +date.month, +date.date, userHandler);
     const birthdayEntity: BirthdayEntity = this.services.BirthdaysService.create.birthdayEntity(birthday);
     await birthdayEntity.save()
+    logger.info(`[Telegram] было создано событие ${JSON.stringify(birthday)}`)
     this.sendMessage(id, `Событие успешно создано`)
   });
 };

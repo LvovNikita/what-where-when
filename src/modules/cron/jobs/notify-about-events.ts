@@ -1,41 +1,53 @@
 import dayjs, { Dayjs } from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek'
+import { Equal, FindOperator, FindOptionsWhere, In } from 'typeorm';
 import { serviceLocator } from './../../serviceLocator';
 import { whatWhereWhenTgBot } from './../../telegram';
 import { EventEntity } from './../../events/entities/event.entity';
 import { EventType } from './../../../libs/enums/event-type.enum';
-import { In } from 'typeorm';
+import { DateTimeService } from './../../datetime';
+import { Week } from './../../events/types/week.type';
+import { logger } from './../../core/logger';
+
+dayjs.extend(isoWeek)
 
 /**
  * Отправиить уведомление о событии
  */
 export async function notifyAboutEvents() {
   const currentDate: Dayjs = dayjs()
+  const year: number = currentDate.get('year')
   const month: number = currentDate.get('month') + 1
   const date: number = currentDate.get('date')
+  const day: number = currentDate.isoWeekday()
+  const currentWeek: Week = DateTimeService.weekOfMonth(currentDate) as Week
+  let weekClause: FindOperator<Week>;
 
-  const events: any = [];
+  if (currentWeek === 'first') {
+    weekClause = In([1, 'first'])
+  } else if (currentWeek === 'last') {
+    weekClause = In(['last', DateTimeService.weeksInMonth(month) ])
+  } else {
+    weekClause = Equal(currentWeek)
+  }
 
-  const annualEvents: EventEntity[] = await serviceLocator.EventsService.find({
-    where: {
-      type: In([EventType.ANNUAL]),
-      month,
-      date
-    }
-  })
+  const events: EventEntity[] = [];
 
-  // TODO: остальные типы событий
-  // type: In([EventType.ANNUAL, EventType.MONTHLY, EventType.ONE_TIME, EventType.SPECIAL, EventType.WEEKLY]),
-  // ежегодные — Д М
-  // ежемесячно — Д
-  // еженедельно - номер дня недели
-  // разовые Д М Г
-  // настраиваемые — ...
+  const getEvents = async (where: FindOptionsWhere<EventEntity>): Promise<EventEntity[]> => {
+    return serviceLocator.EventsService.find({ where })
+  }
 
-  events.push(...annualEvents)
-
-  console.log(events)
+  events.push(
+    ...await getEvents({ type: EventType.ANNUAL, month, date }), 
+    ...await getEvents({ type: EventType.MONTHLY, date }),
+    ...await getEvents({ type: EventType.ONE_TIME, date, month, year }),
+    ...await getEvents({ type: EventType.WEEKLY, day }),
+    ...(await getEvents({ type: EventType.SPECIAL, day, month, week: weekClause }))
+  )
 
   for (const event of events) {
     whatWhereWhenTgBot.sendMessage(event.subscriberId, `Напоминаю о событии: ${event.subject}`)
   }
+
+  logger.info('[Cron] job notifyAboutEvents has been run')
 }

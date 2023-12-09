@@ -5,6 +5,29 @@ import { Week } from 'modules/events/types/week.type';
 dayjs.extend(isoWeek)
 
 export class DateTimeService {
+  
+  /**
+   * Получить номер недели месяца, на которую приходится дата
+   * @param d Дата в формате Dayjs
+   * @returns Номер недели месяца, на которую приходится дата
+   */
+  static weekOfMonth(d: Dayjs): number {
+    const date: number = d.date()
+    const day: number = d.isoWeekday()
+    return Math.ceil((date - 1 - day) / 7) + 1
+  }
+
+  /**
+   * Получить количество недель в месяце по номеру месяца
+   * @param month Номер месяца 
+   * @returns Количество недель в месяце
+   */
+  static weeksInMonth(month: number): number {
+    const daysInMonth: number = dayjs().month(month).endOf('month').date()
+    const monthStartDay: number = dayjs().month(month).startOf('month').isoWeekday()
+    return Math.ceil((monthStartDay + daysInMonth) / 7)
+  }
+
   /**
    * Генератор дат ежегодных событий
    * @param month месяц
