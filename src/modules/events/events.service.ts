@@ -10,6 +10,15 @@ export class EventsService {
   constructor(private readonly eventRepository: Repository<EventEntity>) {}
 
   /**
+   * Поиск событий по параметрам запроса
+   * @param options Параметры поиска TypeORM
+   * @returns Список сущностей дней рождений
+   */
+  async find(options: FindManyOptions<EventEntity> = {}): Promise<EventEntity[]> {
+    return await this.eventRepository.find(options)
+  }
+
+  /**
    * Получить список событий по id подписчика
    * @param subscriberId id подписчика
    * @returns список событий
@@ -28,14 +37,5 @@ export class EventsService {
     eventEntity: (event: Event) => this.eventRepository.create(event),
     /** Фабрика списков событий */
     eventList: (events: Event[]): EventList => new EventList(events),
-  }
-
-  /**
-   * 
-   * @param options 
-   * @returns 
-   */
-  async find(options: FindManyOptions<EventEntity> = {}): Promise<EventEntity[]> {
-    return await this.eventRepository.find(options)
   }
 }

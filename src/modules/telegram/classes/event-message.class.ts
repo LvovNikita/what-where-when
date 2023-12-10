@@ -9,7 +9,7 @@ export class EventMessage {
   constructor(public message: string, public type: EventType) {}
 
   /**
-   * 
+   * Название события
    */
   get subject(): string {
     const subjectStart: number = this.message.indexOf(' ') + 1
@@ -17,7 +17,7 @@ export class EventMessage {
   }
 
   /**
-   * 
+   * Объект с информацией о дате события
    */
   get date(): IDateObject {
     const dateEnd: number = this.message.indexOf(' ')

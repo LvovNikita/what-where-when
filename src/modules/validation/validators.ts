@@ -1,7 +1,7 @@
 import { EventType } from '../../libs/enums/event-type.enum'
 
 /**
- * 
+ * Список валидаторов (отображение типа сообщения в регулярное выражение)
  */
 export const validators: Map<string, RegExp> = new Map([
   [EventType.BIRTHDAY, /^\d{2}.\d{2} @\S*$/],

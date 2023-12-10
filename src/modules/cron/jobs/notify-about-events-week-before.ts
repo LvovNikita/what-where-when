@@ -12,7 +12,7 @@ import { logger } from './../../core/logger';
 dayjs.extend(isoWeek)
 
 /**
- * 
+ * Отправить уведомление о событиях за неделю до
  */
 export async function notifyAboutEventsWeekBefore() {
   const futureDate: Dayjs = dayjs().add(1, 'week')

@@ -4,7 +4,7 @@ import { Uuid } from 'libs/types/uuid.type';
 import { PostgresDate } from 'libs/types/postgres-date.type';
 
 /**
- * 
+ * Сущность уведомлений
  */
 @Entity({ name: 'notifications' })
 export class NotificationEntity extends BaseEntity {

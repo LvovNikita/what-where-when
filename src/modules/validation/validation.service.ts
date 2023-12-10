@@ -1,14 +1,14 @@
 /**
- * 
+ * Сервис валидации
  */
 export class ValidationService {
   constructor(public validators: Map<string, RegExp>) {}
 
   /**
-   * 
-   * @param str 
-   * @param type 
-   * @returns 
+   * Проверка строки на соответствие регулярному выражения
+   * @param str Сообщение
+   * @param type Тип сообщения
+   * @returns Результат проверки
    */
   verifyString(str: string, type: string): boolean {
     if (!this.validators.has(type)) return false

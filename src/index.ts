@@ -8,7 +8,7 @@ import { logger } from './modules/core/logger'
 const { DatabaseService, CronService } = serviceLocator
 
 /**
- * 
+ * Инициализация приложения
  */
 const init = async (): Promise<void> => {
   await DatabaseService.createDatabaseIfNotExists()

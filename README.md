@@ -2,12 +2,13 @@
 
 Telegram-бот, уведомляющий о предстоящих событиях
 
-<!-- * [Telegram](./docs/telegram.md) -->
+## Todo:
 
-<!-- * NotificationService не используется!
-* Bash-скрипты для генерации типовых файлов
+* Одинаковые фрагменты кода в notifyAboutEvents и notifyAboutEventsWeekBefore
+* NotificationService не используется
+
+<!-- * Bash-скрипты для генерации типовых файлов
 * Вынести валидаторы в сервисы
 * Типизация
-* JSDoc
 * Порядок зависимостей
 * GitHub Actions -->
